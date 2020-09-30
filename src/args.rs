@@ -1,10 +1,19 @@
 use chrono::{NaiveDate, NaiveTime};
 use clap::{crate_authors, crate_description, crate_version, AppSettings, Clap};
 use date_time_parser::{DateParser, TimeParser};
+use log::LevelFilter;
 
 #[derive(Clap, Debug)]
 #[clap(version = crate_version!(), author = crate_authors!("\n"), about = crate_description!())]
 pub struct Args {
+    #[clap(
+        long,
+        env = "RUST_LOG",
+        default_value = "info",
+        about = "Set the log level"
+    )]
+    pub log_level: LevelFilter,
+
     #[clap(subcommand)]
     subcmd: SubCommand,
 }
