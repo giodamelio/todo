@@ -6,13 +6,11 @@ use log::{trace, LevelFilter};
 #[derive(Clap, Debug)]
 #[clap(version = crate_version!(), author = crate_authors!("\n"), about = crate_description!())]
 pub struct Args {
-    #[clap(
-        long,
-        env = "RUST_LOG",
-        default_value = "info",
-        about = "Set the log level"
-    )]
-    pub log_level: LevelFilter,
+    #[clap(long, about = "Set the log level")]
+    pub log_level: Option<LevelFilter>,
+
+    #[clap(short, long, about = "Print verbose logging")]
+    pub verbose: bool,
 
     #[clap(subcommand)]
     subcmd: SubCommand,

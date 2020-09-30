@@ -2,6 +2,7 @@
 extern crate diesel;
 
 mod args;
+mod logging;
 mod models;
 mod schema;
 
@@ -10,10 +11,11 @@ use std::env;
 use anyhow::{Context, Result};
 use clap::crate_version;
 use log::{debug, error, info, trace};
-use flexi_logger::{Logger, LogSpecBuilder};
 
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
+
+use logging::Logger;
 
 fn database_connect() -> Result<SqliteConnection> {
     let database_url =
@@ -22,23 +24,18 @@ fn database_connect() -> Result<SqliteConnection> {
 }
 
 fn go() -> Result<()> {
-    // Start the default logger
-    let mut reconfig_logger = Logger::with_env()
-        .start()
-        .context("Logger initialization failed")?;
+    // Start up the logger
+    let logger = Logger::init()?;
 
     // Parse the args
     let args = args::parse();
+    debug!("Cli arguments: {:?}", args);
 
-    // Update the logger level if the cli flag specifies it
-    reconfig_logger.set_new_spec(
-        LogSpecBuilder::new()
-            .default(args.log_level)
-            .build(),
-    );
+    // Setup the logging with the args
+    logger.set_from_args(&args);
 
+    // Say hello!
     debug!("TODO version {}", crate_version!());
-    info!("Args: {:?}", args);
 
     // Connect to the database
     let connection = database_connect()?;
