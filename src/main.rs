@@ -9,7 +9,7 @@ use std::env;
 
 use anyhow::{Context, Result};
 use clap::crate_version;
-use log::{debug, error, info};
+use log::{debug, error, info, trace};
 
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
@@ -47,8 +47,9 @@ fn main() {
     match go() {
         Err(error) => {
             error!("Error: {}", error);
-            for err in error.chain().skip(1) {
-                error!("    {}", err)
+            trace!("Error chain:");
+            for err in error.chain() {
+                trace!(" - {}", err)
             }
         }
         Ok(()) => {}
