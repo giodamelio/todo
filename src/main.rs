@@ -1,18 +1,18 @@
-use clap::{Clap, crate_authors, crate_version, crate_description, AppSettings};
 use chrono::{NaiveDate, NaiveTime};
+use clap::{crate_authors, crate_description, crate_version, AppSettings, Clap};
 use date_time_parser::{DateParser, TimeParser};
 
 #[derive(Clap, Debug)]
 #[clap(version = crate_version!(), author = crate_authors!("\n"), about = crate_description!())]
 struct Args {
     #[clap(subcommand)]
-    subcmd: SubCommand
+    subcmd: SubCommand,
 }
 
 #[derive(Clap, Debug)]
 enum SubCommand {
     #[clap(about = "Add a TODO", setting = AppSettings::TrailingVarArg)]
-    Add(Add)
+    Add(Add),
 }
 
 #[derive(Clap, Debug)]
@@ -26,8 +26,8 @@ struct Add {
 
 #[derive(Debug)]
 enum TimeOrDate {
-    Time (NaiveTime),
-    Date (NaiveDate),
+    Time(NaiveTime),
+    Date(NaiveDate),
 }
 
 // TODO fix this parsing so it properly parses inputs in these formats
