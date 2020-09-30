@@ -1,7 +1,7 @@
 use chrono::{NaiveDate, NaiveTime};
 use clap::{crate_authors, crate_description, crate_version, AppSettings, Clap};
 use date_time_parser::{DateParser, TimeParser};
-use log::LevelFilter;
+use log::{trace, LevelFilter};
 
 #[derive(Clap, Debug)]
 #[clap(version = crate_version!(), author = crate_authors!("\n"), about = crate_description!())]
@@ -47,6 +47,12 @@ fn parse_natural_datetime(input: &str) -> Result<TimeOrDate, &str> {
     // Try parsing as both a fuzzy time and a fuzzy date
     let parsed_time = TimeParser::parse(input);
     let parsed_date = DateParser::parse(input);
+
+    trace!(
+        "Parsed time: {:?}, Parsed date: {:?}",
+        parsed_time,
+        parsed_date
+    );
 
     match (parsed_time, parsed_date) {
         (Some(time), Some(_date)) => Ok(TimeOrDate::Time(time)),

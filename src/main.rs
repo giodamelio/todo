@@ -10,6 +10,7 @@ use std::env;
 use anyhow::{Context, Result};
 use clap::crate_version;
 use log::{debug, error, info, trace};
+use flexi_logger::{Logger, LogSpecBuilder};
 
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
@@ -21,10 +22,20 @@ fn database_connect() -> Result<SqliteConnection> {
 }
 
 fn go() -> Result<()> {
+    // Start the default logger
+    let mut reconfig_logger = Logger::with_env()
+        .start()
+        .context("Logger initialization failed")?;
+
+    // Parse the args
     let args = args::parse();
-    pretty_env_logger::formatted_builder()
-        .filter_level(args.log_level)
-        .init();
+
+    // Update the logger level if the cli flag specifies it
+    reconfig_logger.set_new_spec(
+        LogSpecBuilder::new()
+            .default(args.log_level)
+            .build(),
+    );
 
     debug!("TODO version {}", crate_version!());
     info!("Args: {:?}", args);
@@ -36,9 +47,9 @@ fn go() -> Result<()> {
     use schema::todo::dsl::*;
 
     let todo_list = todo.load::<models::Todo>(&connection)?;
-    println!("Listing todos:");
+    info!("Listing todos:");
     for todo_item in todo_list {
-        println!("{:?}", todo_item);
+        info!("{:?}", todo_item);
     }
     Ok(())
 }
