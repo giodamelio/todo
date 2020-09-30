@@ -1,1 +1,1 @@
-DROP TABLE Todo;
+DROP TABLE todo;

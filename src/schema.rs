@@ -1,5 +1,5 @@
 table! {
-    Todo (id) {
+    todo (id) {
         id -> Integer,
         text -> Text,
     }
