@@ -5,20 +5,21 @@ mod args;
 mod models;
 mod schema;
 
+use std::env;
+
+use anyhow::Result;
 use clap::crate_version;
 use log::debug;
-use std::env;
-use std::error::Error;
 
 use diesel::prelude::*;
 use diesel::sqlite::SqliteConnection;
 
-fn database_connect() -> Result<SqliteConnection, Box<dyn Error>> {
+fn database_connect() -> Result<SqliteConnection> {
     let database_url = env::var("DATABASE_URL")?;
     Ok(SqliteConnection::establish(&database_url).expect("Error connecting"))
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> Result<()> {
     let args = args::parse();
     pretty_env_logger::formatted_builder()
         .filter_level(args.log_level)
