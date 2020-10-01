@@ -29,7 +29,7 @@ fn go() -> Result<()> {
 
     // Parse the args
     let args = args::parse();
-    debug!("Cli arguments: {:?}", args);
+    debug!("Cli arguments: {:#?}", args);
 
     // Setup the logging with the args
     logger.set_from_args(&args);
