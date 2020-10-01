@@ -1,17 +1,2 @@
-[package]
-name = "todo"
-version = "0.1.0"
-authors = ["Gio d'Amelio <giodamelio@gmail.com>"]
-edition = "2018"
-description = "A simple TODO cli"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-clap = "3.0.0-beta.2"
-chrono = "0.4.18"
-date_time_parser = "0.1.0"
-log = "0.4.11"
-diesel = { version = "1.4.5", features = ["sqlite"] }
-anyhow = "1.0.32"
-flexi_logger = "0.16.1"
+[workspace]
+members = ["todo-cli"]
