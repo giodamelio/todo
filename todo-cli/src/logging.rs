@@ -9,7 +9,15 @@ pub struct Logger {
 
 impl Logger {
     pub fn init() -> Result<Self> {
+        #[cfg(debug_assertions)]
         let logger = flexi_logger::Logger::with_env()
+            .format(flexi_logger::colored_default_format)
+            .start()
+            .context("Logger initialization failed")?;
+
+        #[cfg(not(debug_assertions))]
+        let logger = flexi_logger::Logger::with_env()
+            .format(flexi_logger::colored_default_format)
             .start()
             .context("Logger initialization failed")?;
 
